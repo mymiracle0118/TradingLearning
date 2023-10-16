@@ -1,0 +1,22 @@
+The first task of this project is to create a new standard ERC specifically to store up to 10kb of mutable data in the blockchain. This is not for the current ethereum blockchain.
+
+In this case, we would another third blockchain, call if ZRC for example. And we would have special ZRC-55 (Example) that users can create contracts to create fungible data storage tokens. Up to 10kb.
+
+The newly crated "ZRC" would also have some system data fields. "Expiration" and "Deposit" that are set by the network. By default when a token for the ZRC is created, the network will set the "Expiration" field to a block number X blocks in the future. Normally token creation has a GAS cost on ethereum. With this special ZRC, it will be GAS plus STORAGE fee.
+
+STORAGE price will be determined as Z + (Y * byte) [byte referencing the number of bytes being stored in the data field that can hold up to 1kb].
+So if the network sets Z = 0.001 and Y = 0.00001.. it would be GAS + 0.001 + (0.00001 * bytes).
+
+The 'deposit' field will accept up to 2x STORAGE. but only in exact STORAGE quantity.
+So if you store 144 bytes in the data field. cost would look like GAS + 0.001 + 0.00144...
+
+You could optionally pay extra 0.00244 (STORAGE COST) into 'Deposit' where it will be held.
+
+When 'Expiration' block is hit, the block processor (Validator) will check the 'Deposit' field. If it is empty. It will ignore it. All blockchain clients will note that the expiration block has passed and will opt to remove the 'data' contents from its local blockchain.
+If the validator determines there is enough 'STORAGE' fee in the deposit field, it will remove that amount from DEPOSIT, and update the expiration block to X blocks in the future again.
+In effect. you pay to to store small amounts of data in the blockchain for a period of time. You can put a deposit of up to 2x that period of time into the token to auto-renew it.
+To create an "ERC" standard for go-ethereum that allows users to create contracts that create fungible data storage tokens. This is it. ERC creation, and code modification of Eth2 validator to update expiration date/deposit.
+
+Since it requires use of Eth2 code, "regular mining" for a test network would not work. You will have to setup an Eth2 test network.
+
+
